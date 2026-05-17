@@ -28,11 +28,15 @@ bool HttpClient::Init()
 
 void HttpClient::ReleasePending()
 {
+	m_httpCallResult.Cancel();
+
 	if (m_pendingRequest != INVALID_HTTPREQUEST_HANDLE && m_steamAPI.SteamHTTP())
 	{
 		m_steamAPI.SteamHTTP()->ReleaseHTTPRequest(m_pendingRequest);
 		m_pendingRequest = INVALID_HTTPREQUEST_HANDLE;
 	}
+
+	m_ready = false;
 }
 
 void HttpClient::Post(const char *url, const std::string &body, uint32 timeoutSec)
